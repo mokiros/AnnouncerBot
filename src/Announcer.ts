@@ -10,7 +10,7 @@ const Announcements = fs
 	.filter((v) => v !== '')
 
 DiscordClient.on('messageCreate', async (msg) => {
-	if (msg.channelId !== getenv('ANNOUNCER_CHANNEL_ID')) {
+	if (msg.channelId !== getenv('ANNOUNCER_CHANNEL_ID') || msg.author.bot) {
 		return
 	}
 	// Message must contain at least 6 space separated words with length of at least 2 characters
