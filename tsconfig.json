@@ -1,7 +1,10 @@
 {
 	"compilerOptions": {
+		"moduleResolution": "node",
 		"module": "CommonJS",
-		"target": "ES2022",
+		"target": "ESNext",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"noImplicitAny": true,
 		"removeComments": true,
