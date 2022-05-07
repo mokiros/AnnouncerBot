@@ -11,8 +11,9 @@ import { UserError } from '../util'
 import { getGuild } from '../common'
 import EvalCommand from './Eval'
 import GameStatsCommand from './GameStats'
+import SuggestCommand from './Suggest'
 
-const SlashCommands = [GetAvatar, EvalCommand, GameStatsCommand] as const
+const SlashCommands = [GetAvatar, EvalCommand, GameStatsCommand, SuggestCommand] as const
 
 const Commands: Map<Command['name'], Command> = new Map()
 const GlobalCommands: ChatInputApplicationCommandData[] = []
@@ -61,7 +62,8 @@ async function SetupLocalChatCommands() {
 	const comman = guild.commands
 	const cmds = await comman.set(LocalCommands)
 
-	//	Currently returns 405 Method Not Allowed. Reason unknown.
+	//	Currently returns 405 Method Not Allowed.
+	//	Possible cause: incorrect permissions when adding the bot
 	//	Related documentation: https://discord.com/developers/docs/interactions/application-commands#permissions
 	//const PermissionData = GetCommandsPermissions(cmds)
 	//await comman.permissions.set({ fullPermissions: PermissionData })
