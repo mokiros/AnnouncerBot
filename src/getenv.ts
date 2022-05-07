@@ -3,6 +3,7 @@ interface ProcessEnv {
 	DISCORD_BOT_TOKEN: string
 	DISCORD_GUILD_ID: string
 	DISCORD_BOT_ID: string
+	GAME_STATS_UNIVERSE: string
 }
 
 const defaultenv: Partial<ProcessEnv> = {}
