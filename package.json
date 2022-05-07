@@ -22,7 +22,7 @@
 		"compile": "tsc",
 		"build": "npm run lint && npm run compile",
 		"start": "node -r dotenv/config .",
-		"dev": "npm run compile && node -r dotenv/config --inspect .",
+		"dev": "npm run compile && node -r dotenv/config --inspect --trace-deprecation .",
 		"pm2": "pm2 startOrRestart pm2.config.json --trace --update-env"
 	},
 	"author": "Mokiros",

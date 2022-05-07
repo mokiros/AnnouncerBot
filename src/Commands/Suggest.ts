@@ -29,6 +29,10 @@ const SuggestCommand: Command = {
 	handler: async (interaction) => {
 		const suggestion = interaction.options.getString('suggestion', true)
 
+		if (suggestion.length < 10) {
+			throw new UserError('Your suggestion is too short.')
+		}
+
 		// Check if the suggestion contains any of the blacklisted words
 		const suggestion_filtered = suggestion.toLowerCase().trim()
 		for (const word of Blacklist) {
