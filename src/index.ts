@@ -38,5 +38,3 @@ DiscordClient.on('ready', async () => {
 })
 
 DiscordClient.login(getenv('DISCORD_BOT_TOKEN'))
-
-export default DiscordClient
