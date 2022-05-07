@@ -4,6 +4,8 @@ interface ProcessEnv {
 	DISCORD_GUILD_ID: string
 	DISCORD_BOT_ID: string
 	GAME_STATS_UNIVERSE: string
+	SUGGESTIONS_CHANNEL_ID: string
+	ANNOUNCER_CHANNEL_ID: string
 }
 
 const defaultenv: Partial<ProcessEnv> = {}

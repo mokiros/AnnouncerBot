@@ -3,6 +3,7 @@ import { ProcessButtonInteraction } from './Buttons'
 import { ReplyEmbed, UserError } from './util'
 import getenv from './getenv'
 import DiscordClient from './client'
+import './Announcer'
 
 DiscordClient.on('interactionCreate', async (interaction) => {
 	try {
