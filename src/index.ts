@@ -1,6 +1,6 @@
 import { ProcessChatCommand, SetupChatCommands } from './Commands'
 import { ProcessButtonInteraction } from './Buttons'
-import { UserError } from './util'
+import { ReplyEmbed, UserError } from './util'
 import getenv from './getenv'
 import DiscordClient from './client'
 
@@ -12,20 +12,20 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 			await ProcessButtonInteraction(interaction)
 		}
 	} catch (err: unknown) {
+		let internal = false
 		let msg
 		if (err instanceof UserError) {
 			msg = err.message
 		} else {
-			msg = 'Internal error'
-		}
-		if (!(err instanceof UserError)) {
+			msg = 'Internal error. This incident was reported.'
 			console.error(err)
+			internal = true
 		}
 		if (interaction.isApplicationCommand() || interaction.isButton() || interaction.isCommand()) {
 			await interaction.reply({
-				content: 'Error: ' + msg,
+				embeds: [ReplyEmbed(msg, 'An error occurred:', 0xff0000)],
 				fetchReply: false,
-				ephemeral: true,
+				ephemeral: !internal,
 			})
 		}
 	}
