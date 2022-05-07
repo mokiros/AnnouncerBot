@@ -35,14 +35,26 @@ const EvalCommand: Command = {
 		const code = interaction.options.getString('code', true)
 		const ephemeral = interaction.options.getBoolean('hidden', false)
 		try {
-			const _result = vm.runInThisContext(code, {
+			const context = vm.createContext({
+				...global,
+				interaction,
+				client: interaction.client,
+				guild: interaction.guild,
+			})
+			const _result = vm.runInContext(code, context, {
 				filename: 'eval',
 				timeout: 2500,
 				displayErrors: true,
 			})
 			let result = await Promise.resolve(_result)
 			if (typeof result === 'object') {
-				result = JSON.stringify(result, null, 2)
+				result =
+					'```json\n' +
+					JSON.stringify(result, null, 2).replaceAll('\\', '\\\\').replaceAll('`', '\\`') +
+					'\n```'
+				if (result.length > 2000) {
+					result = String(result)
+				}
 			} else {
 				result = String(result)
 			}
