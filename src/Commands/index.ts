@@ -47,7 +47,9 @@ function GetCommandsPermissions(cmds: Collection<string, ApplicationCommand>) {
 	const PermissionData = []
 	for (const [id, cmd] of cmds) {
 		const permissions = Permissions.get(cmd.name)
-		if (!permissions) continue
+		if (!permissions) {
+			continue
+		}
 		PermissionData.push({ id, permissions })
 	}
 	return PermissionData
