@@ -26,11 +26,19 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 			internal = true
 		}
 		if (interaction.isApplicationCommand() || interaction.isButton() || interaction.isCommand()) {
-			await interaction.reply({
-				embeds: [ReplyEmbed(msg, 'An error occurred:', 0xff0000)],
-				fetchReply: false,
-				ephemeral: !internal,
-			})
+			const embed = ReplyEmbed(msg, 'An error occurred:', 0xff0000)
+			if (interaction.replied) {
+				await interaction.editReply({
+					content: null,
+					embeds: [embed],
+				})
+			} else {
+				await interaction.reply({
+					embeds: [embed],
+					fetchReply: false,
+					ephemeral: !internal,
+				})
+			}
 		}
 	}
 })
