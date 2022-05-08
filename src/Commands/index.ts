@@ -12,8 +12,9 @@ import { getGuild } from '../common'
 import EvalCommand from './Eval'
 import GameStatsCommand from './GameStats'
 import SuggestCommand from './Suggest'
+import GetBadgesCommand from './GetBadges'
 
-const SlashCommands = [GetAvatar, EvalCommand, GameStatsCommand, SuggestCommand] as const
+const SlashCommands = [GetAvatar, EvalCommand, GameStatsCommand, SuggestCommand, GetBadgesCommand] as const
 
 const Commands: Map<Command['name'], Command> = new Map()
 const GlobalCommands: ChatInputApplicationCommandData[] = []
