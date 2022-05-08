@@ -65,9 +65,9 @@ export type UniverseDataReturnType = {
 	favoritedCount: number
 }
 
-export async function getUniverseIcon(universeId: string): Promise<string> {
+export async function getUniverseIcon(universeId: number): Promise<string> {
 	const url = new URL('https://thumbnails.roblox.com/v1/games/icons')
-	url.searchParams.append('universeIds', universeId)
+	url.searchParams.append('universeIds', universeId.toString())
 	url.searchParams.append('size', '512x512')
 	url.searchParams.append('format', 'Png')
 	url.searchParams.append('isCircular', 'false')
@@ -79,9 +79,9 @@ export async function getUniverseIcon(universeId: string): Promise<string> {
 	return data.imageUrl
 }
 
-export async function getUniverseData(universeId: string): Promise<UniverseDataReturnType> {
+export async function getUniverseData(universeId: number): Promise<UniverseDataReturnType> {
 	const url = new URL('https://games.roblox.com/v1/games')
-	url.searchParams.append('universeIds', universeId)
+	url.searchParams.append('universeIds', universeId.toString())
 	const res = await apiGet<UniverseDataReturnType[]>(url.toString())
 	const data = res.data[0]
 	if (!data) {
