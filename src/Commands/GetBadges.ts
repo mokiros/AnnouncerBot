@@ -67,8 +67,7 @@ const GetBadgesCommand: Command = {
 	],
 	handler: async (interaction) => {
 		const hidden = interaction.options.getBoolean('hidden', false)
-		const replyPromise = interaction.reply({
-			content: 'Loading badges...',
+		const replyPromise = interaction.deferReply({
 			ephemeral: hidden ?? false,
 			fetchReply: true,
 		})
