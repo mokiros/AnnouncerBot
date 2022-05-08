@@ -2,11 +2,12 @@ import { ChatInputApplicationCommandData, CommandInteraction, Constants } from '
 import Command from './Command'
 import GetAvatar from './GetAvatar'
 import { UserError } from '../util'
-import { getGuild } from '../common'
 import EvalCommand from './Eval'
 import GameStatsCommand from './GameStats'
 import SuggestCommand from './Suggest'
 import GetBadgesCommand from './GetBadges'
+import DiscordClient from '../client'
+import getenv from '../getenv'
 
 const SlashCommands = [GetAvatar, EvalCommand, GameStatsCommand, SuggestCommand, GetBadgesCommand] as const
 
@@ -37,7 +38,8 @@ export async function ProcessChatCommand(interaction: CommandInteraction): Promi
 }
 
 async function SetupLocalChatCommands() {
-	const guild = await getGuild()
+	const gid = getenv('DISCORD_GUILD_ID')
+	const guild = await DiscordClient.guilds.fetch(gid)
 	const comman = guild.commands
 	await comman.set(LocalCommands)
 }
