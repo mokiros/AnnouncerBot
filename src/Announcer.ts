@@ -27,3 +27,5 @@ DiscordClient.on('messageCreate', async (msg) => {
 		})
 	}
 })
+
+console.log('Announcer ready')

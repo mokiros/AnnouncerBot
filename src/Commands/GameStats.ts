@@ -1,7 +1,15 @@
 import { MessageEmbed } from 'discord.js'
 import getenv from '../getenv'
-import { getUniverseData, getUniverseIcon } from '../util/rbxapi'
+import { getUniverseData, getUniverseIcon, getUniverseIdFromPlaceId } from '../util/rbxapi'
 import Command from './Command'
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+let UniverseId = getenv('GAME_STATS_UNIVERSE')!
+if (!UniverseId) {
+	getUniverseIdFromPlaceId(getenv('GAME_STATS_PLACE')).then((id) => {
+		UniverseId = id
+	})
+}
 
 const GameStatsCommand: Command = {
 	local: true,
@@ -9,8 +17,8 @@ const GameStatsCommand: Command = {
 	description: 'Show current game stats',
 	handler: async (interaction) => {
 		const now = Date.now()
-		const data = await getUniverseData(getenv('GAME_STATS_UNIVERSE'))
-		const icon = await getUniverseIcon(getenv('GAME_STATS_UNIVERSE'))
+		const data = await getUniverseData(UniverseId)
+		const icon = await getUniverseIcon(UniverseId)
 		const updated = new Date(data.updated)
 		const embed = new MessageEmbed()
 			.setTitle(`${data.name}`)

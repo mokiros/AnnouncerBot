@@ -1,6 +1,5 @@
 import { MessageEmbed } from 'discord.js'
 import DiscordClient from '../client'
-import { getGuild } from '../common'
 import getenv from '../getenv'
 import { ReplyEmbed, UserError } from '../util'
 import Command from './Command'
@@ -27,6 +26,10 @@ const SuggestCommand: Command = {
 		},
 	],
 	handler: async (interaction) => {
+		const SuggestionsChannelID = getenv('SUGGESTIONS_CHANNEL_ID', false)
+		if (!SuggestionsChannelID) {
+			throw new UserError('Suggestions channel not available')
+		}
 		const suggestion = interaction.options.getString('suggestion', true)
 
 		if (suggestion.length < 10) {
@@ -42,7 +45,7 @@ const SuggestCommand: Command = {
 		}
 
 		// Searching for the channel
-		const channel = DiscordClient.channels.cache.get(getenv('SUGGESTIONS_CHANNEL_ID'))
+		const channel = DiscordClient.channels.cache.get(SuggestionsChannelID)
 		if (!channel || !channel.isText()) {
 			throw new Error('Suggestions channel not found')
 		}

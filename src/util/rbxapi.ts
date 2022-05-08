@@ -5,7 +5,7 @@ export type ApiSuccessType<R> = {
 	data: R
 }
 
-function apiGet<R>(url: string): Promise<ApiSuccessType<R>> {
+function apiGet<R, S = ApiSuccessType<R>>(url: string): Promise<S> {
 	return new Promise((resolve, reject) => {
 		https
 			.get(url, (res) => {
@@ -86,6 +86,17 @@ export async function getUniverseData(universeId: number): Promise<UniverseDataR
 	const data = res.data[0]
 	if (!data) {
 		throw `No universe data found for universe ${universeId}. Request url: ${url}`
+	}
+	return data
+}
+
+export async function getUniverseIdFromPlaceId(placeId: number): Promise<number> {
+	const url = new URL('https://api.roblox.com/universes/get-universe-containing-place')
+	url.searchParams.append('placeId', placeId.toString())
+	const res = await apiGet<never, { UniverseId: number }>(url.toString())
+	const data = res.UniverseId
+	if (!data) {
+		throw `No universe found for place ${placeId}. Request url: ${url}`
 	}
 	return data
 }

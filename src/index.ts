@@ -3,7 +3,10 @@ import { ProcessButtonInteraction } from './Buttons'
 import { ReplyEmbed, UserError } from './util'
 import getenv from './getenv'
 import DiscordClient from './client'
-import './Announcer'
+
+if (getenv('ANNOUNCER_CHANNEL_ID', false)) {
+	import('./Announcer')
+}
 
 DiscordClient.on('interactionCreate', async (interaction) => {
 	try {
