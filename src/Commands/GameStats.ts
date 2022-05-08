@@ -1,6 +1,6 @@
 import { MessageEmbed } from 'discord.js'
 import getenv from '../getenv'
-import { getUniverseData, getUniverseIcon, getUniverseIdFromPlaceId } from '../util/rbxapi'
+import { getUniverseData, getUniverseIcon, getUniverseIdFromPlaceId } from '../util/RobloxApi'
 import Command from './Command'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
