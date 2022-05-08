@@ -8,8 +8,16 @@ import SuggestCommand from './Suggest'
 import GetBadgesCommand from './GetBadges'
 import DiscordClient from '../client'
 import getenv from '../getenv'
+import UpdateCommand from './Update'
 
-const SlashCommands = [GetAvatar, EvalCommand, GameStatsCommand, SuggestCommand, GetBadgesCommand] as const
+const SlashCommands = [
+	GetAvatar,
+	EvalCommand,
+	GameStatsCommand,
+	SuggestCommand,
+	GetBadgesCommand,
+	UpdateCommand,
+] as const
 
 const Commands: Map<Command['name'], Command> = new Map()
 const GlobalCommands: ChatInputApplicationCommandData[] = []
