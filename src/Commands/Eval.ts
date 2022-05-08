@@ -1,6 +1,7 @@
 import Command from './Command'
 import * as vm from 'vm'
 import { UserError, ReplyEmbed } from '../util'
+import { isAuthorized } from '../util'
 
 const EvalCommand: Command = {
 	local: true,
@@ -22,7 +23,7 @@ const EvalCommand: Command = {
 	],
 	defaultPermission: false,
 	handler: async (interaction) => {
-		if (interaction.user.id !== '170832420789026817') {
+		if (!isAuthorized(interaction.user.id)) {
 			throw new UserError('You do not have permission to run code')
 		}
 		const code = interaction.options.getString('code', true)

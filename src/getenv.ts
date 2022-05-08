@@ -7,6 +7,7 @@ interface ProcessEnv {
 	GAME_STATS_UNIVERSE: number
 	SUGGESTIONS_CHANNEL_ID: string
 	ANNOUNCER_CHANNEL_ID: string
+	AUTHORIZED_IDS: string
 }
 
 const defaultenv: Partial<ProcessEnv> = {}
