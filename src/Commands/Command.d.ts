@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionData, ApplicationCommandPermissionData, CommandInteraction } from 'discord.js'
+import { ApplicationCommandOptionData, CommandInteraction } from 'discord.js'
 
 export default interface Command {
 	readonly local: true
@@ -6,6 +6,5 @@ export default interface Command {
 	readonly description: string
 	readonly options?: ApplicationCommandOptionData[]
 	readonly defaultPermission?: boolean
-	readonly permissions?: ApplicationCommandPermissionData[]
 	readonly handler: (interaction: CommandInteraction) => Promise<void> | void
 }

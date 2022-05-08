@@ -21,13 +21,6 @@ const EvalCommand: Command = {
 		},
 	],
 	defaultPermission: false,
-	permissions: [
-		{
-			id: '170832420789026817',
-			type: 'USER',
-			permission: true,
-		},
-	],
 	handler: async (interaction) => {
 		if (interaction.user.id !== '170832420789026817') {
 			throw new UserError('You do not have permission to run code')
