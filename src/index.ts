@@ -27,7 +27,7 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 		}
 		if (interaction.isApplicationCommand() || interaction.isButton() || interaction.isCommand()) {
 			const embed = ReplyEmbed(msg, 'An error occurred:', 0xff0000)
-			if (interaction.replied) {
+			if (interaction.replied || interaction.deferred) {
 				await interaction.editReply({
 					content: null,
 					embeds: [embed],
