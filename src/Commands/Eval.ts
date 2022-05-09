@@ -35,7 +35,7 @@ const EvalCommand: Command = {
 				client: interaction.client,
 				guild: interaction.guild,
 			})
-			const _result = vm.runInContext(code, context, {
+			const _result = await vm.runInContext(code, context, {
 				filename: 'eval',
 				timeout: 2500,
 				displayErrors: true,
