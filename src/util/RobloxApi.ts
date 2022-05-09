@@ -15,10 +15,22 @@ function apiGet<R, S = ApiSuccessType<R>>(url: string): Promise<S> {
 					data += chunk
 				})
 				res.on('end', () => {
-					if (res.statusCode === 200) {
-						resolve(JSON.parse(data))
-					} else {
-						reject(JSON.parse(data))
+					data = data.replace('\uFEFF', '') // remove BOM
+					try {
+						if (res.statusCode === 200) {
+							resolve(JSON.parse(data))
+						} else {
+							const err = JSON.parse(data)
+							if (err.errors) {
+								const firstError = err.errors[0]
+								if (firstError) {
+									return reject(new UserError(`Error ${firstError.code}: ${firstError.message}`))
+								}
+							}
+							reject(new UserError(`Unknown error. Status code: ${res.statusCode}`))
+						}
+					} catch (err) {
+						reject(err)
 					}
 				})
 			})
