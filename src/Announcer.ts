@@ -6,6 +6,7 @@ import * as path from 'path'
 // Fetching announcements from the file and removing empty strings
 const Announcements = fs
 	.readFileSync(path.resolve('txt', 'AnnouncerLines.txt'), 'utf8')
+	.replaceAll('\r', '')
 	.split('\n')
 	.filter((v) => v !== '')
 

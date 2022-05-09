@@ -10,6 +10,7 @@ import * as path from 'path'
 // Fetching blacklisted words from the file and removing empty strings
 const Blacklist = fs
 	.readFileSync(path.resolve('txt', 'SuggestionsBlacklist.txt'), 'utf8')
+	.replaceAll('\r', '')
 	.split('\n')
 	.filter((v) => v !== '')
 
