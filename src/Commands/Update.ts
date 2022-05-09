@@ -40,7 +40,7 @@ const UpdateCommand: Command = {
 	local: true,
 	name: 'update',
 	description: 'Update the bot',
-	defaultPermission: false,
+	defaultPermission: true,
 	handler: async (interaction) => {
 		if (!isAuthorized(interaction.user.id)) {
 			throw new UserError('You are not authorized to use this command.')

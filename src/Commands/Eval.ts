@@ -21,7 +21,7 @@ const EvalCommand: Command = {
 			required: false,
 		},
 	],
-	defaultPermission: false,
+	defaultPermission: true,
 	handler: async (interaction) => {
 		if (!isAuthorized(interaction.user.id)) {
 			throw new UserError('You do not have permission to run code')
