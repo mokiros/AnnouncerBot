@@ -4,7 +4,7 @@ import Button from './Button'
 
 const RefreshButton = new Button({
 	id: 'refreshstats',
-	emoji: '🔄',
+	emoji: '<:Refresh:971778482755477576>',
 	style: 'PRIMARY',
 })
 
