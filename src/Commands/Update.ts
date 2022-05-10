@@ -37,7 +37,7 @@ if (updateDataExists) {
 }
 
 const UpdateCommand: Command = {
-	local: true,
+	local: false,
 	name: 'update',
 	description: 'Update the bot',
 	defaultPermission: true,

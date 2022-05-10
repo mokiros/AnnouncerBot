@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionData, CommandInteraction } from 'discord.js'
 
 export default interface Command {
-	readonly local: true
+	readonly local: boolean
 	readonly name: string
 	readonly description: string
 	readonly options?: ApplicationCommandOptionData[]

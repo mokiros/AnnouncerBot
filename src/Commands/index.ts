@@ -45,6 +45,15 @@ export async function ProcessChatCommand(interaction: CommandInteraction): Promi
 	await Promise.resolve(cmd.handler(interaction))
 }
 
+async function SetupGlobalChatCommands() {
+	const app = DiscordClient.application
+	if (!app) {
+		throw new Error('Application not found')
+	}
+	const comman = app.commands
+	await comman.set(GlobalCommands)
+}
+
 async function SetupLocalChatCommands() {
 	const gid = getenv('DISCORD_GUILD_ID')
 	const guild = await DiscordClient.guilds.fetch(gid)
@@ -54,6 +63,7 @@ async function SetupLocalChatCommands() {
 
 export async function SetupChatCommands(): Promise<void> {
 	await SetupLocalChatCommands()
+	await SetupGlobalChatCommands()
 }
 
 export default Commands

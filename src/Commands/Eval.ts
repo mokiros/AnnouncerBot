@@ -4,7 +4,7 @@ import { UserError, ReplyEmbed } from '../util'
 import { isAuthorized } from '../util'
 
 const EvalCommand: Command = {
-	local: true,
+	local: false,
 	name: 'eval',
 	description: "Run code in the bot's environment",
 	options: [
