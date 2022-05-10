@@ -11,8 +11,16 @@ if (!UniverseId) {
 	})
 }
 
+const UpdateCooldown = 10000
+let CachedEmbed: MessageEmbed | undefined
+let LastUpdate = 0
+
 export async function getGameStatsEmbed() {
+	if (Date.now() - LastUpdate < UpdateCooldown && CachedEmbed) {
+		return CachedEmbed
+	}
 	const now = Date.now()
+	LastUpdate = now
 	const data = await getUniverseData(UniverseId)
 	const icon = await getUniverseIcon(UniverseId)
 	const updated = new Date(data.updated)
@@ -31,6 +39,7 @@ export async function getGameStatsEmbed() {
 			text: `Retrieved data in ${Date.now() - now} ms`,
 		})
 		.setTimestamp(new Date())
+	CachedEmbed = embed
 	return embed
 }
 
@@ -39,13 +48,15 @@ const GameStatsCommand: Command = {
 	name: 'gamestats',
 	description: 'Show current game stats',
 	handler: async (interaction) => {
+		const p = interaction.deferReply({
+			ephemeral: false,
+		})
 		const embed = await getGameStatsEmbed()
 		const buttonRow = Button.createMessageButtonsRow(['refreshstats'])
-		await interaction.reply({
+		await p
+		await interaction.editReply({
 			embeds: [embed],
 			components: [buttonRow],
-			ephemeral: false,
-			fetchReply: false,
 		})
 	},
 }

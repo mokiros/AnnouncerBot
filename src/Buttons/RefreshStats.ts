@@ -8,15 +8,25 @@ const RefreshButton = new Button({
 	style: 'PRIMARY',
 })
 
-const RefreshButtonCooldown = 5000
+const RefreshButtonCooldown = 10000
+let LastUpdate = 0
 
 RefreshButton.setHandler(async (interaction) => {
+	if (Date.now() - LastUpdate < RefreshButtonCooldown) {
+		return interaction.reply({
+			content: "You're updating too fast!",
+			ephemeral: true,
+		})
+	}
+	LastUpdate = Date.now()
+	const p = interaction.deferUpdate()
 	const embed = await getGameStatsEmbed()
 	const button = Button.createMessageButton('refreshstats')
 	button.setDisabled(true)
 	const row = new MessageActionRow()
 	row.addComponents(button)
-	await interaction.update({
+	await p
+	await interaction.editReply({
 		embeds: [embed],
 		components: [row],
 	})
