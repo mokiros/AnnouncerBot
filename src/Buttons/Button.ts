@@ -5,6 +5,7 @@ import {
 	MessageButton,
 	MessageButtonStyleResolvable,
 } from 'discord.js'
+import { UserError } from '../util'
 
 interface BaseButtonProperties {
 	id: string
@@ -108,13 +109,13 @@ export default class Button {
 		const [id, ...params] = customId.split(Button.separator)
 		const button = Button.buttons.get(id)
 		if (!button) {
-			throw new Error(`Button ${id} does not exist`)
+			throw new UserError(`Button ${id} does not exist`)
 		}
 		if (button.isLink) {
-			throw new Error(`Button ${id} is a link`)
+			throw new UserError(`Button ${id} is a link`)
 		}
 		if (!button.handler) {
-			throw new Error(`Button ${id} does not have a handler`)
+			throw new UserError(`Button ${id} does not have a handler`)
 		}
 		return button.handler(interaction, params)
 	}
