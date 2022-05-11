@@ -69,8 +69,8 @@ const SuggestCommand: Command = {
 		})
 
 		// Adding reactions
-		await msg.react('👍')
-		await msg.react('👎')
+		await msg.react('<:check:839393930806296596>')
+		await msg.react('<:cross:839393930156310538>')
 	},
 }
 
