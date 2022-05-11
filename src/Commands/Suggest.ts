@@ -38,7 +38,7 @@ const SuggestCommand: Command = {
 		}
 
 		// Check if the suggestion contains any of the blacklisted words
-		const suggestion_filtered = suggestion.toLowerCase().trim()
+		const suggestion_filtered = suggestion.toLowerCase().trim().split(/\s+/)
 		for (const word of Blacklist) {
 			if (suggestion_filtered.includes(word)) {
 				throw new UserError(`Your suggestion contains blacklisted words.`)
