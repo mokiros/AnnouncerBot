@@ -4,8 +4,10 @@
 	"description": "The bot for ACG (RBLX Sci-fi community)",
 	"main": "dist/index.js",
 	"dependencies": {
+		"@discordjs/rest": "^0.4.1",
 		"bufferutil": "^4.0.6",
-		"discord.js": "^13.6.0",
+		"discord-api-types": "^0.32.1",
+		"discord.js": "^13.7.0",
 		"dotenv": "^16.0.0",
 		"erlpack": "^0.1.4",
 		"utf-8-validate": "^5.0.9",
@@ -18,9 +20,12 @@
 		"eslint": "^8.15.0",
 		"eslint-config-prettier": "^8.5.0",
 		"prettier": "^2.6.2",
-		"typescript": "^4.6.4"
+		"ts-patch": "^2.0.1",
+		"typescript": "^4.6.4",
+		"typescript-transform-paths": "^3.3.1"
 	},
 	"scripts": {
+		"prepare": "ts-patch install -s",
 		"lint": "eslint src",
 		"lint-fix": "eslint --fix src",
 		"compile": "tsc",
