@@ -15,11 +15,11 @@ const GetAvatar: Command = {
 	],
 	handler: (interaction) => {
 		const user = interaction.options.getUser('target', true)
-		return interaction.reply({
+		return {
 			content: user.avatarURL(),
 			ephemeral: true,
 			fetchReply: false,
-		})
+		}
 	},
 }
 

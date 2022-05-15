@@ -1,18 +1,11 @@
 import { MessageEmbed } from 'discord.js'
-import DiscordClient from '../client'
-import getenv from '../getenv'
-import { ReplyEmbed, UserError } from '../util'
+import DiscordClient from '@client'
+import { ReplyEmbed, UserError, ReadLines, config } from '@util'
 import Command from './Command'
+import path from 'path'
+import Button from '../BaseButton'
 
-import * as fs from 'fs'
-import * as path from 'path'
-
-// Fetching blacklisted words from the file and removing empty strings
-const Blacklist = fs
-	.readFileSync(path.resolve('txt', 'SuggestionsBlacklist.txt'), 'utf8')
-	.replaceAll('\r', '')
-	.split('\n')
-	.filter((v) => v !== '')
+const Blacklist = ReadLines(path.resolve('txt', 'SuggestionsBlacklist.txt'))
 
 const SuggestCommand: Command = {
 	local: true,
@@ -27,10 +20,14 @@ const SuggestCommand: Command = {
 		},
 	],
 	handler: async (interaction) => {
-		const SuggestionsChannelID = getenv('SUGGESTIONS_CHANNEL_ID', false)
-		if (!SuggestionsChannelID) {
-			throw new UserError('Suggestions channel not available')
+		const SuggestionsChannelID = config.get('suggestions_channel')
+
+		// Searching for the channel
+		const channel = DiscordClient.channels.cache.get(SuggestionsChannelID)
+		if (!channel || !channel.isText()) {
+			throw new Error('Suggestions channel not found')
 		}
+
 		const suggestion = interaction.options.getString('suggestion', true)
 
 		if (suggestion.length < 10) {
@@ -43,12 +40,6 @@ const SuggestCommand: Command = {
 			if (suggestion_filtered.includes(word)) {
 				throw new UserError(`Your suggestion contains blacklisted words.`)
 			}
-		}
-
-		// Searching for the channel
-		const channel = DiscordClient.channels.cache.get(SuggestionsChannelID)
-		if (!channel || !channel.isText()) {
-			throw new Error('Suggestions channel not found')
 		}
 
 		// Creating embed for the suggestion
@@ -64,13 +55,16 @@ const SuggestCommand: Command = {
 		// Success message
 		interaction.reply({
 			embeds: [ReplyEmbed(`Suggestion added successfully: ${msg.url}`, undefined, 0x00ff99)],
+			components: [Button.createMessageButtonsRow([['deletesuggestion', interaction.user.id, msg.id]])],
 			ephemeral: true,
 			fetchReply: false,
 		})
 
 		// Adding reactions
-		await msg.react('<:check:839393930806296596>')
-		await msg.react('<:cross:839393930156310538>')
+		const reactions = config.get('suggestions_reactions', ['👍', '👎'])
+		for (const reaction of reactions) {
+			await msg.react(reaction)
+		}
 	},
 }
 

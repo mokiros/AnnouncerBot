@@ -8,8 +8,16 @@
 		"strict": true,
 		"noImplicitAny": true,
 		"removeComments": true,
+		"baseUrl": "./src",
 		"rootDir": "./src",
-		"outDir": "./dist"
+		"outDir": "./dist",
+		"paths": {
+			"@config": ["./config"],
+			"@util": ["./util"],
+			"@util/*": ["./util/*"],
+			"@client": ["./client"]
+		},
+		"plugins": [{ "transform": "typescript-transform-paths" }]
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "**/*.spec.ts"]

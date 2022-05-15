@@ -1,11 +1,13 @@
 import {
 	ButtonInteraction,
 	EmojiIdentifierResolvable,
+	MessageButtonStyleResolvable,
 	MessageActionRow,
 	MessageButton,
-	MessageButtonStyleResolvable,
 } from 'discord.js'
-import { UserError } from '../util'
+import { UserError } from '@util'
+import path from 'path'
+import fs from 'fs'
 
 interface BaseButtonProperties {
 	id: string
@@ -58,7 +60,7 @@ export default class Button {
 		this.paramsnum = paramsnum
 	}
 
-	public create(params?: string[]): MessageButton {
+	public create(params?: (number | string)[]): MessageButton {
 		if (this.paramsnum && params?.length !== this.paramsnum) {
 			throw new Error(`Button ${this.id} requires ${this.paramsnum} parameters`)
 		}
@@ -84,7 +86,7 @@ export default class Button {
 		return button
 	}
 
-	public static createMessageButton(id: string, params?: string[]): MessageButton {
+	public static createMessageButton(id: string, params?: (number | string)[]): MessageButton {
 		const button = Button.buttons.get(id)
 		if (!button) {
 			throw new Error(`Button ${id} does not exist`)
@@ -92,7 +94,7 @@ export default class Button {
 		return button.create(params)
 	}
 
-	public static createMessageButtonsRow(buttons: ([id: string, ...params: string[]] | string)[]) {
+	public static createMessageButtonsRow(buttons: ([id: string, ...params: (number | string)[]] | string)[]) {
 		const row = new MessageActionRow()
 		for (const btn of buttons) {
 			if (typeof btn === 'string') {
@@ -118,5 +120,15 @@ export default class Button {
 			throw new UserError(`Button ${id} does not have a handler`)
 		}
 		return button.handler(interaction, params)
+	}
+}
+
+export function LoadButtons() {
+	const ButtonsDir = path.resolve(__dirname, 'Buttons')
+	const CommandFiles = fs.readdirSync(ButtonsDir)
+	for (const file of CommandFiles) {
+		const filepath = path.resolve(ButtonsDir, file)
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		require(filepath)
 	}
 }

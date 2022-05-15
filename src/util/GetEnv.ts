@@ -1,13 +1,11 @@
+import UserError from './UserError'
+
 interface ProcessEnv {
 	NODE_ENV: 'development' | 'production'
 	DISCORD_BOT_TOKEN: string
 	DISCORD_GUILD_ID: string
-	DISCORD_BOT_ID: string
-	GAME_STATS_PLACE: number
-	GAME_STATS_UNIVERSE: number
-	SUGGESTIONS_CHANNEL_ID: string
-	ANNOUNCER_CHANNEL_ID: string
 	AUTHORIZED_IDS: string
+	BLOXLINK_API_KEY: string
 }
 
 const defaultenv: Partial<ProcessEnv> = {}
@@ -20,7 +18,7 @@ export default function getenv<EnvKey extends keyof ProcessEnv>(key: EnvKey, req
 export default function getenv<EnvKey extends keyof ProcessEnv>(key: EnvKey, required?: boolean): ProcessEnv[EnvKey] | undefined {
 	const v = process.env[key] ?? defaultenv[key]
 	if (!v && required !== false) {
-		throw new Error(`Missing env var ${key}`)
+		throw new UserError(`Missing environment variable ${key}`, true)
 	}
 	return v as ProcessEnv[EnvKey]
 }

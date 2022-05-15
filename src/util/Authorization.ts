@@ -1,4 +1,4 @@
-import getenv from '../getenv'
+import getenv from './GetEnv'
 
 const authorized_ids = getenv('AUTHORIZED_IDS')
 	.split(',')

@@ -1,6 +1,5 @@
-import DiscordClient from '../client'
-import { UserError } from '../util'
-import { isAuthorized } from '../util'
+import DiscordClient from '@client'
+import { UserError, isAuthorized } from '@util'
 import Command from './Command'
 import { exec, spawn } from 'child_process'
 import path from 'path'
@@ -36,6 +35,8 @@ if (updateDataExists) {
 	})
 }
 
+let isUpdating = false
+
 const UpdateCommand: Command = {
 	local: false,
 	name: 'update',
@@ -44,6 +45,9 @@ const UpdateCommand: Command = {
 	handler: async (interaction) => {
 		if (!isAuthorized(interaction.user.id)) {
 			throw new UserError('You are not authorized to use this command.')
+		}
+		if (isUpdating) {
+			throw new UserError('The bot is already updating.')
 		}
 		const timings: number[] = []
 		const getstr = () => {
@@ -64,37 +68,43 @@ const UpdateCommand: Command = {
 			ephemeral: false,
 			fetchReply: false,
 		})
-		const startTime = Date.now()
-		let _t = Date.now()
-		for (let i = 0; i < updateCommands.length; i++) {
-			const cmd = updateCommands[i]
-			await runCommand(cmd)
-			timings.push(Date.now() - _t)
+		isUpdating = true
+		try {
+			const startTime = Date.now()
+			let _t = Date.now()
+			for (let i = 0; i < updateCommands.length; i++) {
+				const cmd = updateCommands[i]
+				await runCommand(cmd)
+				timings.push(Date.now() - _t)
+				await replyPromise
+				replyPromise = interaction.editReply({
+					content: getstr(),
+				})
+				_t = Date.now()
+			}
 			await replyPromise
-			replyPromise = interaction.editReply({
-				content: getstr(),
+			const str = getstr() + 'Restarting bot process\u2026 '
+			await interaction.editReply({
+				content: str,
 			})
-			_t = Date.now()
+			const data = {
+				id: interaction.webhook.id,
+				token: interaction.webhook.token,
+				time: Date.now(),
+				str,
+				startTime,
+			}
+			fs.writeFileSync(updateDataPath, JSON.stringify(data))
+			spawn('npm', ['run', 'pm2'], {
+				cwd: process.cwd(),
+				detached: true,
+				stdio: 'inherit',
+			})
+			process.exit(0)
+		} catch (err) {
+			isUpdating = false
+			throw err
 		}
-		await replyPromise
-		const str = getstr() + 'Restarting bot process\u2026 '
-		await interaction.editReply({
-			content: str,
-		})
-		const data = {
-			id: interaction.webhook.id,
-			token: interaction.webhook.token,
-			time: Date.now(),
-			str,
-			startTime,
-		}
-		fs.writeFileSync(updateDataPath, JSON.stringify(data))
-		spawn('npm', ['run', 'pm2'], {
-			cwd: process.cwd(),
-			detached: true,
-			stdio: 'inherit',
-		})
-		process.exit(0)
 	},
 }
 

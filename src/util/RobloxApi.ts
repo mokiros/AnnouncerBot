@@ -192,3 +192,10 @@ export async function getAwardedBadges(
 	])
 	return awardedBadges
 }
+
+export async function checkAwardedBadges(userId: number, badges: number[]): Promise<boolean> {
+	const url = new URL(`https://badges.roblox.com/v1/users/${userId}/badges/awarded-dates`)
+	url.searchParams.append('badgeIds', badges.join(','))
+	const res = await apiGet<{ badgeId: number; awardedDate: string }[]>(url.toString())
+	return res.data.length === badges.length
+}

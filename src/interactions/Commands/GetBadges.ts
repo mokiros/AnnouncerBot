@@ -1,12 +1,12 @@
 import { MessageEmbed } from 'discord.js'
-import { UserError } from '../util'
+import { UserError } from '@util'
 import {
 	getAwardedBadges,
 	getUniverseBadges,
 	getUniverseIdFromPlaceId,
 	getUserIdFromUsername,
 	getUsernameFromUserId,
-} from '../util/RobloxApi'
+} from '@util/RobloxApi'
 import Command from './Command'
 
 const GetBadgesCommand: Command = {

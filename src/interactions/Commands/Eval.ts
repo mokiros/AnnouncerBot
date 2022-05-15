@@ -1,7 +1,6 @@
 import Command from './Command'
 import * as vm from 'vm'
-import { UserError, ReplyEmbed } from '../util'
-import { isAuthorized } from '../util'
+import { UserError, ReplyEmbed, isAuthorized } from '@util'
 
 const EvalCommand: Command = {
 	local: false,
@@ -31,6 +30,8 @@ const EvalCommand: Command = {
 		try {
 			const context = vm.createContext({
 				...global,
+				process,
+				require,
 				interaction,
 				client: interaction.client,
 				guild: interaction.guild,
@@ -46,29 +47,24 @@ const EvalCommand: Command = {
 					'```json\n' +
 					JSON.stringify(result, null, 2).replaceAll('\\', '\\\\').replaceAll('`', '\\`') +
 					'\n```'
-				if (result.length > 2000) {
-					result = String(result)
+				if (result.length > 4000) {
+					result = result.substring(0, 4000) + '\n...\n```'
 				}
 			} else {
 				result = String(result)
 			}
-			await interaction.reply({
+			return {
 				ephemeral: ephemeral ?? false,
 				fetchReply: false,
 				embeds: [ReplyEmbed(result, 'Eval', 0x00ff00)],
-			})
-		} catch (err) {
-			let msg
-			if (err instanceof Error) {
-				msg = err.message
-			} else {
-				msg = String(err)
 			}
-			await interaction.reply({
+		} catch (err) {
+			const msg = err instanceof Error ? err.message : String(err)
+			return {
 				ephemeral: ephemeral ?? false,
 				fetchReply: false,
 				embeds: [ReplyEmbed(`Error: ${msg}`, 'Eval', 0xff0000)],
-			})
+			}
 		}
 	},
 }
