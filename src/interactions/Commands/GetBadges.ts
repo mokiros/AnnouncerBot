@@ -89,18 +89,29 @@ const GetBadgesCommand: Command = {
 		const awardedBadges = await getAwardedBadges(userId, universeBadges)
 		const embed = new MessageEmbed()
 		embed.setTitle(`Badges for ${username}:`)
-		embed.setDescription(
-			awardedBadges
+		let description = awardedBadges
+			.map((badge) => {
+				const [id, name, awardDate] = badge
+				const str = `${awardDate !== null ? '✅' : '❌'} [${name}](https://www.roblox.com/badges/${id})`
+				if (awardDate !== null) {
+					return str + ` • Awarded <t:${awardDate.getTime().toString().slice(0, -3)}:R>`
+				}
+				return str
+			})
+			.join('\n')
+		if (description.length > 4000) {
+			description = awardedBadges
 				.map((badge) => {
-					const [id, name, awardDate] = badge
-					const str = `${awardDate !== null ? '✅' : '❌'} [${name}](https://www.roblox.com/badges/${id})`
-					if (awardDate !== null) {
-						return str + ` • Awarded <t:${awardDate.getTime().toString().slice(0, -3)}:R>`
+					let name = badge[1]
+					const awardDate = badge[2]
+					if (name.length > 20) {
+						name = name.slice(0, 20) + '...'
 					}
-					return str
+					return `${awardDate !== null ? '✅' : '❌'} ${name}`
 				})
-				.join('\n'),
-		)
+				.join('\n')
+		}
+		embed.setDescription(description)
 		await replyPromise
 		await interaction.editReply({
 			content: null,
